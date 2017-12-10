@@ -16,7 +16,7 @@ All of these can be installed via brew/apt/yum (check out the formulas for brew 
 
 ### Project generation
 
-Assuming, you've cloned the repo to `<dev-dir>/Gauss`.
+Assuming, you've cloned the repo to `<dev-dir>/Asteroids`.
 In console:
 
     cd <dev-dir>/Asteroids
