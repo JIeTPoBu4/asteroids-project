@@ -1,7 +1,7 @@
 # asteroids-project
 ### About 
 
-C/C++ course final project. A hands-free controller for playing Asteroids arcade game. 
+C/C++ course final project. A hands-free controller for playing Asteroids arcade game. :sparkles:
 
 ## Build instructions
 
@@ -17,11 +17,11 @@ All of these can be installed via brew/apt/yum (check out the formulas for brew 
 ### Project generation
 
 Assuming, you've cloned the repo to <dev-dir>/Asteroids. In console:
-cd <dev-dir>/Asteroids <br/ >
-mkdir build <br/ >
-cd build <br/ >
-cmake .. <br/ >
-make <br/ >
+cd <dev-dir>/Asteroids__
+mkdir build__
+cd build__
+cmake ..__
+make__
 
 At this point you'll have Asteroids in <dev-dir>/Asteroids/build/src depending on your environment. Execute Asteroids. Remember, changes made to that project configurations are not saved, because those project files are regenerated every time you clone and/or rerun cmake generator. So to make changes permanent, you have to edit the corresponding CMakeLists.txt file.
 
