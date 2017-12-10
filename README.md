@@ -9,7 +9,7 @@ C/C++ course final project. A hands-free controller for playing Asteroids arcade
 
 * CMake 3.9+, can be downloaded from https://cmake.org/download/
 * SFML 2.4.2, can be downloaded from https://www.sfml-dev.org/download.php
-* OpenCV 3.3.0, can be downloaded https://opencv.org/releases.html
+* OpenCV 3.3.0, can be downloaded from https://opencv.org/releases.html
 * any modern compiler or IDE (gcc/clang + make, Visual Studio, Xcode)
 
 All of these can be installed via brew/apt/yum (check out the formualas for brew at http://formulae.brew.sh/search/).
