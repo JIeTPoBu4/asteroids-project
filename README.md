@@ -17,11 +17,11 @@ All of these can be installed via brew/apt/yum (check out the formulas for brew 
 ### Project generation
 
 Assuming, you've cloned the repo to <dev-dir>/Asteroids. In console:
-cd <dev-dir>/Asteroids
-mkdir build
-cd build
-cmake ..
-make
+- cd <dev-dir>/Asteroids
+- mkdir build
+- cd build
+- cmake ..
+- make
 
 At this point you'll have Asteroids in <dev-dir>/Asteroids/build/src depending on your environment. Execute Asteroids. Remember, changes made to that project configurations are not saved, because those project files are regenerated every time you clone and/or rerun cmake generator. So to make changes permanent, you have to edit the corresponding CMakeLists.txt file.
 
