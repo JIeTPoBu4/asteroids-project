@@ -19,15 +19,6 @@ All of these can be installed via brew/apt/yum (check out the formulas for brew 
 Assuming, you've cloned the repo to `<dev-dir>/Gauss`.
 In console:
 
-    cd <dev-dir>/Gauss
-    mkdir build
-    cd build
-    cmake ..
-### Project generation
-
-Assuming, you've cloned the repo to `<dev-dir>/Gauss`.
-In console:
-
     cd <dev-dir>/Asteroids
     mkdir build
     cd build
