@@ -91,7 +91,6 @@ std::string Controller::doAction(const int totalAngleOfFinger, const int fingerS
 	return result;
 }
 
-
 void Controller::track(Controller *obj) {
     bool useMorphOps = true;
     obj -> is_in_process = true;
@@ -281,7 +280,6 @@ float Controller::innerAngle(float px1, float py1, float px2, float py2, float c
  	return A;
 }
 
-
 void Controller::drawLines(cv::Mat& image) {
 	int W = (int)FRAME_WIDTH/2; 
     int H = (int)FRAME_HEIGHT/2; 
@@ -293,7 +291,6 @@ void Controller::drawLines(cv::Mat& image) {
 	cv::line(image, cv::Point(0, H + radius), cv::Point(FRAME_WIDTH, H + radius), Scalar( 110, 220, 0 ), 2, 8);
 	cv::circle(image, cv::Point(W, H), radius, Scalar( 110, 220, 0 ), 2, 8, 0);
 }
-
 
 void Controller::analyze(int current_x, int current_y, bool in_fire) {
     int W = (int)FRAME_WIDTH/2; 
@@ -380,7 +377,6 @@ void Controller::getState() {
 	std::lock_guard<std::mutex> lock(st_mutex);
 	std::cout << st.up << " " <<  st.down   <<  " " <<  st.left << " " << st.right << std::endl;
 }
-
 
 void Controller::set_st(bool in_up, bool in_down, bool in_left, bool in_right, bool in_fire) {
         st.up = in_up;
