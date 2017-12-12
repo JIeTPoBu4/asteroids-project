@@ -31,7 +31,7 @@ void GameOverState::render() {
 
 void GameOverState::handleEvents() {
 	sf::Event event;
-	
+
 	while (window->pollEvent(event)) {
 		if (event.type == sf::Event::EventType::Closed) {
 			window->close();
@@ -63,10 +63,14 @@ void GameOverState::handleEvents() {
 void GameOverState::addScore() {
 	std::ifstream file("./HighScoreFile", std::ios::in);
 
-	if(!file) {
+	if (!file) {
 		std::cerr << "Error:can`t open stream!\n";
 
 		return;
+	}
+
+	if (!name.size()) {
+		name = "Unnamed";
 	}
 
 	std::map<std::string,std::string> score_list;
@@ -76,7 +80,7 @@ void GameOverState::addScore() {
 	char *f_reserv = NULL;
 	char buf[4096];
 
-	 while (!file.eof()) {
+	while (!file.eof()) {
 		file.read(buf, sizeof buf);
 
 		if (!strlen(buf) && !f_buf) {
@@ -88,7 +92,7 @@ void GameOverState::addScore() {
 			return;
 		}
 
-		if(!f_buf) {
+		if (!f_buf) {
 			f_buf = new char[file.gcount()];
 			snprintf(f_buf, file.gcount(), "%s", buf);
 		}
@@ -117,11 +121,12 @@ void GameOverState::addScore() {
 	
 	std::map<std::string, std::string>::iterator iter;
 	iter = score_list.find(name);
+	
 	if (iter -> first != name) {
 		out_file << name << ":" << score << "\n";
 		std::map<std::string,std::string>::iterator i = score_list.begin();
-		
-		for (i ; i != score_list.end() ; i++) {
+
+		for(i ; i != score_list.end() ; i++) {
 			out_file << i->first << ":" << i->second << "\n";
 		}
 	}
