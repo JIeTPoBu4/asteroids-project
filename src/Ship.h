@@ -3,14 +3,15 @@
 
 #include "Entity.h"
 #include "Bullet.h"
+#include "Audio.h"
 #include <memory>
 
 enum flags{up,down,left,right,fire};
 
 class Ship : public Entity {
-public:
+public :
 
-	Ship();
+	Ship(Audio *_a_obj);
 	~Ship();
 
 	void reset();
@@ -36,8 +37,9 @@ public:
 	void setWorldSize(sf::Vector2f size);
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-private:
-	
+private :
+
+	Audio *a_obj;
 	sf::Clock clk;
 	sf::ConvexShape shape;
 	static const int numberOfLives = 3;

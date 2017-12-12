@@ -10,7 +10,7 @@
 
 const sf::Time Game::timePerFrame = sf::seconds(1.f / 60.f);
 
-Game::Game(Controller *ptr) :
+Game::Game(controller *ptr) :
 contr(ptr) {
 	sf::ContextSettings settings;
 	settings.antialiasingLevel = 8;
@@ -26,14 +26,18 @@ Game::~Game() {
 void Game::run() {
 	sf::Clock clock;
 	sf::Time elapsedTime = sf::Time::Zero;
+	
 	while (window.isOpen()) {
+		a_obj.playMusic();
 		currentState->handleEvents();
 		elapsedTime += clock.restart();
+
 		while (elapsedTime > timePerFrame) {
 			elapsedTime -= timePerFrame;
 			currentState->handleEvents();
 			currentState->update(timePerFrame);
 		}
+
 		currentState->render();
 	}
 
@@ -42,18 +46,19 @@ void Game::run() {
 
 void Game::changeState(States nextState, unsigned score) {
 	delete currentState;
+
 	switch (nextState) {
-	case States::GAMEPLAY :
-		currentState = new GameplayState(this);
-		break;
-	case States::HIGHSCORES :
-		currentState = new HighscoresState(this);
-		break;
-	case States::MAIN_MENU :
-		currentState = new MainMenuState(this);
-		break;
-	case States::GAME_OVER :
-		currentState = new GameOverState(this, score);
-		break;
+		case States::GAMEPLAY :
+			currentState = new GameplayState(this);
+			break;
+		case States::HIGHSCORES :
+			currentState = new HighscoresState(this);
+			break;
+		case States::MAIN_MENU:
+			currentState = new MainMenuState(this);
+			break;
+		case States::GAME_OVER:
+			currentState = new GameOverState(this, score);
+			break;
 	}
 }

@@ -3,8 +3,8 @@
 
 const std::string GameState::fontPath = "./fonts/Hyperspace Bold.ttf";
 
-GameState::GameState(Game* _game) : 
-game(_game), 
+GameState::GameState(Game* _game) :
+game(_game),
 window(_game->getWindow()) {
 	game = _game;
 	this->window = _game->getWindow();
@@ -27,15 +27,14 @@ sf::Text GameState::getText(unsigned size, float height, std::string str, sf::Te
 	txt.setFont(font);
 	txt.setCharacterSize(size);
 	txt.setString(str);
+
 	if (centered) {
 		centerText(txt, height);
 	}
 	else {
 		txt.setPosition(0.f, height);
 	}
-
 	txt.setStyle(style);
-	
-	return txt;
 
+	return txt;
 }

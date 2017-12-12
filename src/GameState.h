@@ -7,7 +7,7 @@
 class Game;
 
 class GameState {
-public:
+public :
 
 	GameState() {}
 	GameState(Game* _game);
@@ -17,7 +17,7 @@ public:
 	virtual void update(sf::Time dt) = 0;
 	virtual void render() = 0;
 
-protected:
+protected :
 
 	Game* game;
 	sf::RenderWindow* window;
@@ -28,8 +28,8 @@ protected:
 	sf::Text getText(unsigned size, float height, std::string str = "", 
 	sf::Text::Style style = sf::Text::Style::Bold, bool centered = true);
 
-private:
-	
+private :
+
 	static const std::string fontPath;
 };
 

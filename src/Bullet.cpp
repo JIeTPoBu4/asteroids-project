@@ -2,6 +2,7 @@
 #include "Bullet.h"
 #include <cmath>
 
+
 Bullet::Bullet(sf::Vector2f position, float direction) :
 travelled(0),
 mIsAlive(true) {
@@ -19,6 +20,7 @@ Bullet::~Bullet() {
 void Bullet::update(sf::Time dt) {
 	shape.move(speed.x * dt.asSeconds(), speed.y * dt.asSeconds());
 	travelled += bulletSpeed * dt.asSeconds();
+	
 	if (travelled > maxDistance) {
 		mIsAlive = false;
 	}

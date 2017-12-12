@@ -3,16 +3,17 @@
 
 #include <SFML/Graphics.hpp>
 #include "GameState.h"
-#include "Controller.h"
+#include "controller.h"
+#include "Audio.h"
 
 class GameState;
 
 class Game {
-public:
+public :
 
 	enum States {MAIN_MENU, HIGHSCORES, GAMEPLAY, GAME_OVER};
 	
-	Game(Controller *ptr);
+	Game(controller *ptr);
 	~Game();
 
 	sf::RenderWindow* getWindow() { return &window; }
@@ -20,13 +21,13 @@ public:
 	void run();
 	static const sf::Time timePerFrame;
 	void changeState(States nextState, unsigned score = 0);
-	Controller *contr;
+	controller *contr;
+	Audio a_obj;
 
-private:
-	
+private :
+
 	bool gameRunning;
 	sf::RenderWindow window;
-	
 	GameState* currentState;
 
 	void handleEvents();

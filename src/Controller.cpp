@@ -6,36 +6,37 @@ th(track, this),
 MIN_OBJECT_AREA(40*40),
 FRAME_WIDTH(400),
 FRAME_HEIGHT(300) {
-	H_MIN = 0;
-	H_MAX = 256;
-	S_MIN = 0;
-	S_MAX = 256;
-	V_MIN = 0;
-	V_MAX = 256;
-	MAX_OBJECT_AREA = FRAME_HEIGHT * FRAME_WIDTH/1.5;
-	set_st(false, false ,false, false, false);
-}
+ 	H_MIN = 0;
+    H_MAX = 256;
+    S_MIN = 0;
+    S_MAX = 256;
+    V_MIN = 0;
+    V_MAX = 256;
+    MAX_OBJECT_AREA = FRAME_HEIGHT * FRAME_WIDTH/1.5;
+    set_st(false, false ,false, false, false);
+ }
 
-Controller::~Controller() {
+ Controller::~Controller() {
 	th.join();
 }
 
-void Controller::createTrackbars() {
-	cv::namedWindow("Trackbars",0);
+void Controller::createTrackbars() { 
+    cv::namedWindow("Trackbars",0);
+
 	char TrackbarName[50];
-	sprintf( TrackbarName, "H_MIN", H_MIN);
-	sprintf( TrackbarName, "H_MAX", H_MAX);
-	sprintf( TrackbarName, "S_MIN", S_MIN);
-	sprintf( TrackbarName, "S_MAX", S_MAX);
-	sprintf( TrackbarName, "V_MIN", V_MIN);
-	sprintf( TrackbarName, "V_MAX", V_MAX);
+	sprintf( TrackbarName, "H_MIN");
+	sprintf( TrackbarName, "H_MAX");
+	sprintf( TrackbarName, "S_MIN");
+	sprintf( TrackbarName, "S_MAX");
+	sprintf( TrackbarName, "V_MIN");
+	sprintf( TrackbarName, "V_MAX");
     
-    cv::createTrackbar( "H_MIN", "Trackbars", &H_MIN, H_MAX, Controller::on_trackbar );
-    cv::createTrackbar( "H_MAX", "Trackbars", &H_MAX, H_MAX, Controller::on_trackbar );
-    cv::createTrackbar( "S_MIN", "Trackbars", &S_MIN, S_MAX, Controller::on_trackbar );
-    cv::createTrackbar( "S_MAX", "Trackbars", &S_MAX, S_MAX, Controller::on_trackbar );
-    cv::createTrackbar( "V_MIN", "Trackbars", &V_MIN, V_MAX, Controller::on_trackbar );
-    cv::createTrackbar( "V_MAX", "Trackbars", &V_MAX, V_MAX, Controller::on_trackbar );
+    cv::createTrackbar( "H_MIN", "Trackbars", &H_MIN, H_MAX, controller::on_trackbar );
+    cv::createTrackbar( "H_MAX", "Trackbars", &H_MAX, H_MAX, controller::on_trackbar );
+    cv::createTrackbar( "S_MIN", "Trackbars", &S_MIN, S_MAX, controller::on_trackbar );
+    cv::createTrackbar( "S_MAX", "Trackbars", &S_MAX, S_MAX, controller::on_trackbar );
+    cv::createTrackbar( "V_MIN", "Trackbars", &V_MIN, V_MAX, controller::on_trackbar );
+    cv::createTrackbar( "V_MAX", "Trackbars", &V_MAX, V_MAX, controller::on_trackbar );
 }
 
 void Controller::morphOps(cv::Mat &thresh) {
@@ -50,7 +51,9 @@ void Controller::morphOps(cv::Mat &thresh) {
 }
 
 void Controller::sortContours(std::vector<std::vector<cv::Point>>& contours) {
-    auto contourComparator = [](std::vector<cv::Point> a, std::vector<cv::Point> b) { return cv::contourArea(a) > cv::contourArea(b); };
+    auto contourComparator = [](std::vector<cv::Point> a, std::vector<cv::Point> b) { 
+    	return cv::contourArea(a) > cv::contourArea(b); 
+    };
     sort(contours.begin(), contours.end(), contourComparator);
 }
 
@@ -60,8 +63,9 @@ void Controller::colorReduce(cv::Mat& image, int div=32) {
 
     for (int j = 0; j < nl; j++) {
         uchar* data = image.ptr<uchar>(j);
-			for (int i = 0; i < nc; i++) {
-            	data[i] = data[i] / div * div + div / 2;
+
+        for (int i = 0; i < nc; i++) {
+            data[i] = data[i] / div * div + div / 2;
         }
     }
 }
@@ -104,8 +108,8 @@ void Controller::track(Controller *obj) {
 	capture.set(CV_CAP_PROP_FRAME_HEIGHT,obj -> FRAME_HEIGHT);
 
 	cv::Mat colorReduced;
+	while(cv::waitKey(30) != 27) {
 
-	while (cv::waitKey(30) != 27) {
 		capture.read(cameraFeed);
 		cv::flip(cameraFeed, cameraFeed, 1);
 		obj -> createTrackbars();
@@ -118,15 +122,15 @@ void Controller::track(Controller *obj) {
 		cv::imshow("Frame", colorReduced);
 		cv::imshow("Mask", threshold);
 
-		if (! obj -> is_in_process) {
+		if(! obj -> is_in_process) {
 			cv::destroyWindow("Frame");
 			cv::destroyWindow("Mask");
-			cv::destroyWindow("Trackbars");
+			cv::destroyWindow("Trackbars"); 
 
 			return;
 		}
 	}
-	
+
 	cv::destroyWindow("Frame");
 	cv::destroyWindow("Mask");
 	cv::destroyWindow("Trackbars"); 
@@ -147,8 +151,9 @@ void Controller::track(Controller *obj) {
 	bool handFound = false;
 
 	int inAngleMin = 200, inAngleMax = 300, angleMin = 180, angleMax = 359, lengthMin = 10, lengthMax = 80;
-	
-	while (obj -> is_in_process) {
+
+	while(obj -> is_in_process) {
+
 		capture.read(cameraFeed);
 		cv::flip(cameraFeed, cameraFeed, 1);
 		cv::cvtColor(cameraFeed,HSV,COLOR_BGR2HSV);
@@ -181,10 +186,6 @@ void Controller::track(Controller *obj) {
 
 			cv::circle(objectsOnly, centerPoint, 8, Scalar(255, 0, 0), CV_FILLED);
 
-			/*cv::convexHull(contours[0], convexHullPoint, false, true);
-			cv::convexHull(contours[0], convexHullPoint, false, false);
-			cv::approxPolyDP(cv::Mat(contours[0]), contours[0], 18, true); */
-
 			std::vector<std::vector<cv::Point> > hull(1);
 			cv::convexHull(cv::Mat(contours[0]), hull[0], false);
 			cv::drawContours(objectsOnly, hull, 0, cv::Scalar(0, 255, 0), 3);
@@ -198,9 +199,8 @@ void Controller::track(Controller *obj) {
 				cv::Rect boundingBox = cv::boundingRect(hull[0]);
 				cv::rectangle(objectsOnly, boundingBox, cv::Scalar(255, 0, 0));
 
-				//cv::Point center = cv::Point(boundingBox.x + boundingBox.width / 2, boundingBox.y + boundingBox.height / 2);
-
 				for (size_t i = 0; i < convexityDefects.size(); i++) {
+
 					cv::Point p1 = contours[0][convexityDefects[i][0]];
 					cv::Point p2 = contours[0][convexityDefects[i][1]];
 					cv::Point p3 = contours[0][convexityDefects[i][2]];
@@ -210,9 +210,10 @@ void Controller::track(Controller *obj) {
 					double length = std::sqrt(std::pow(p1.x - p3.x, 2) + std::pow(p1.y - p3.y, 2));
 
 					if (angle > angleMin - 180 && angle < angleMax - 180 && inAngle > inAngleMin - 180 &&
-						inAngle < inAngleMax - 180 && length > lengthMin / 100.0 * boundingBox.height && 
+					    inAngle < inAngleMax - 180 && length > lengthMin / 100.0 * boundingBox.height && 
 						length < lengthMax / 100.0 * boundingBox.height) {
-					  	validPoints.push_back(p1);
+
+					  validPoints.push_back(p1);
 					}
 				}
 
@@ -237,24 +238,24 @@ void Controller::track(Controller *obj) {
 		cv::namedWindow("Objects Only", cv::WINDOW_AUTOSIZE);
 		cv::imshow("Objects Only", objectsOnly);
 
-		char keypress = cv::waitKey(20);
-
+		char keypress = cv::waitKey(20); 
 	  	if (keypress == 27) { 
 	    	break; 
 	  	}
 	}
 }
 
-float Controller::innerAngle(float px1, float py1, float px2, float py2, float cx1, float cy1){
+float Controller::innerAngle(float px1, float py1, float px2, float py2, float cx1, float cy1) {
 	float dist1 = std::sqrt(  (px1-cx1)*(px1-cx1) + (py1-cy1)*(py1-cy1) );
 	float dist2 = std::sqrt(  (px2-cx1)*(px2-cx1) + (py2-cy1)*(py2-cy1) );
 
 	float Ax, Ay;
 	float Bx, By;
-	float Cx, Cy;  
-
+	float Cx, Cy;
+ 
 	Cx = cx1;
 	Cy = cy1;
+
 	if (dist1 < dist2) {
 		Bx = px1;
 		By = py1;
@@ -267,7 +268,7 @@ float Controller::innerAngle(float px1, float py1, float px2, float py2, float c
 		Ax = px1;
 		Ay = py1;
 	}
-	
+
 	float Q1 = Cx - Ax;
 	float Q2 = Cy - Ay;
 	float P1 = Bx - Ax;
@@ -293,83 +294,83 @@ void Controller::drawLines(cv::Mat& image) {
 }
 
 void Controller::analyze(int current_x, int current_y, bool in_fire) {
-    int W = (int)FRAME_WIDTH/2; 
+    int W = (int)FRAME_WIDTH/2;
     int H = (int)FRAME_HEIGHT/2;
     int radius = (int)(0.125 * FRAME_HEIGHT);
     st_mutex.lock();
     
     //Круг -- STOP
     if ((current_x >= (FRAME_WIDTH/2 - radius)) && (current_x <= (FRAME_WIDTH/2 + radius)) && (current_y >= (FRAME_HEIGHT/2 - radius)) && (current_y <= (FRAME_HEIGHT/2 + radius))) {
-    	if (in_fire)
-       	 	set_st(false, false, false, false, true/*, false, false, false*/);
-       	else
-        	set_st(false, false, false, false, false/*, false, false, false*/);
+       if(in_fire)
+        	set_st(false, false, false, false, true);
+        else
+        	set_st(false, false, false, false, false);
     }
     
     //up_left
     if ((current_x > 0) && (current_x < (W - radius)) && (current_y > 0) && (current_y < (H - radius))) {
         if(in_fire)
-        	set_st(true, false, true, false, true/*, false, false, false*/);
+        	set_st(true, false, true, false, true);
         else
-        	set_st(true, false, true, false, false/*, false, false, false*/);
+        	set_st(true, false, true, false, false);
     }
     
     //up
     if ((current_x > (W - radius)) && (current_x < (W + radius)) && (current_y > 0) && (current_y < (H - radius))) {
     	if(in_fire)
-        	set_st(true, false, false, false, true/*, false, false, false*/);
+        	set_st(true, false, false, false, true);
         else
-        	set_st(true, false, false, false, false/*, false, false, false*/);
+        	set_st(true, false, false, false, false);
     }
     
     //up_right
     if ((current_x > (W + radius)) && (current_x < FRAME_WIDTH) && (current_y > 0) && (current_y < (H - radius))) {
     	if(in_fire)
-        	set_st(true, false, false, true, true/*, false, false, false*/);
+        	set_st(true, false, false, true, true);
        	else
-       		set_st(true, false, false, true, false/*, false, false, false*/);
+       		set_st(true, false, false, true, false);
     }
     
     //left
     if ((current_x > 0) && (current_x < (W - radius)) && (current_y > (H - radius)) && (current_y < (H + radius))) {
     	if(in_fire)
-        	set_st(false, false, true, false, true/*, false, true, false*/);
+        	set_st(false, false, true, false, true);
         else
-        	set_st(false, false, true, false, false/*, false, true, false*/);
+        	set_st(false, false, true, false, false);
     }
     
     //right
     if ((current_x > (W + radius)) && (current_x < FRAME_WIDTH) && (current_y > (H - radius)) && (current_y < (H + radius))) {
     	if(in_fire)
-        	set_st(false, false, false, true, true/*, false, false, true*/);
+        	set_st(false, false, false, true, true);
         else
-        	set_st(false, false, false, true, false/*, false, false, true*/);
+        	set_st(false, false, false, true, false);
     }
     
     //down_left
     if ((current_x > 0) && (current_x < (W - radius)) && (current_y > (H + radius)) && (current_y < FRAME_HEIGHT)) {
     	if(in_fire)
-        	set_st(false, true, true, false, true/*, true, false, false*/);
+        	set_st(false, true, true, false, true);
         else
-        	set_st(false, true, true, false, false/*, true, false, false*/);
+        	set_st(false, true, true, false, false);
     }
     
     //down
     if ((current_x > (W - radius)) && (current_x < (W + radius)) && (current_y > (H + radius)) && (current_y < FRAME_HEIGHT)) {
     	if(in_fire)
-        	set_st(false, true, false, false, true/*, false, false, false*/);
+        	set_st(false, true, false, false, true);
         else
-        	set_st(false, true, false, false, false/*, false, false, false*/);
+        	set_st(false, true, false, false, false);
     }
     
     //down_right
     if ((current_x > (W + radius)) && (current_x < FRAME_WIDTH) && (current_y > (H + radius)) && (current_y) < FRAME_HEIGHT) {
     	if(in_fire)
-       		set_st(false, true, false, true, true/*, false, false, false*/);
+       		set_st(false, true, false, true, true);
        	else
-       		set_st(false, true, false, true, false/*, false, false, false*/);
+       		set_st(false, true, false, true, false);
     }
-
+    
     st_mutex.unlock();
 }
 
@@ -378,7 +379,7 @@ void Controller::getState() {
 	std::cout << st.up << " " <<  st.down   <<  " " <<  st.left << " " << st.right << std::endl;
 }
 
-void Controller::set_st(bool in_up, bool in_down, bool in_left, bool in_right, bool in_fire) {
+void Controller::set_st(bool in_up,  bool in_down, bool in_left, bool in_right, bool in_fire) {
         st.up = in_up;
         st.down = in_down;
         st.left = in_left;

@@ -3,7 +3,7 @@
 #include <SFML/Graphics.hpp>
 
 class Entity : public sf::Drawable {
-public:
+public :
 
 	Entity();
 	virtual ~Entity();
@@ -11,13 +11,12 @@ public:
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 	virtual void update(sf::Time dt) = 0;
 
-protected:
-
+protected :
 	sf::Vector2f speed;
 	sf::Shape *ashape;
 
-private:
-	
+private : 
+
 	static float dotProduct(const sf::Vector2f& lhs, const sf::Vector2f& rhs);
 	static sf::Vector2f unitVector(const sf::Vector2f& vector);
 	static sf::Vector2f perpendicularVector(const sf::Vector2f& vector);

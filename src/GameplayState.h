@@ -5,8 +5,8 @@
 #include "World.h"
 
 class GameplayState : public GameState {
-public:
-	
+public :
+
 	GameplayState(Game* _game);
 	virtual ~GameplayState();
 
@@ -14,10 +14,13 @@ public:
 	virtual void render() override;
 	virtual void handleEvents() override;
 
-private:
+private :
 
 	World m_World;
 	bool gameRunning;
+	sf::Text soundSwitchButton;
+	sf::Text musicSwitchButton;
+	sf::Text nextSongButton;
 };
 
 #endif

@@ -5,8 +5,7 @@
 #include "Entity.h"
 
 class Asteroid : public Entity {
-public:
-
+public :
 	enum Size {BIG, MEDIUM, SMALL};
 	
 	Asteroid(sf::Texture &m_Texture);
@@ -18,10 +17,9 @@ public:
 	sf::Vector2f getSpeed() const { return speed; }
 	
 	virtual void update(sf::Time dt) override;
-	bool isAlive() { return alive; }
+	bool isAlive() { return alive;}
 
-private:
-
+private :
 	bool alive;
 	sf::ConvexShape *shape;
 	Size size;
@@ -30,7 +28,6 @@ private:
 	static std::map<Size, int> radiuses;
 	void generateShape();
 
-	//sf::Texture m_Texture;
 	void setWorldSize(sf::Vector2f size);
 	sf::Vector2f m_WorldSize;
 };

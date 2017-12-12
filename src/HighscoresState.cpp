@@ -1,8 +1,6 @@
 #include "HighscoresState.h"
 #include <SFML/Network.hpp>
-#include <fstream>
 #include <iostream>
-#include <list>
 
 HighscoresState::HighscoresState(Game *_game) :
 GameState(_game),
@@ -26,8 +24,9 @@ void HighscoresState::render() {
 void HighscoresState::getScores() {
 	std::ifstream file("./HighScoreFile", std::ios::in);
 
-	if(!file) {
+	if (!file) {
 		std::cerr << "Error:can`t open stream!\n";
+
 		return;
 	}
 
@@ -35,16 +34,15 @@ void HighscoresState::getScores() {
 	char *f_reserv = NULL;
 	char buf[4096];
 
-	 while(!file.eof()) {
+	 while (!file.eof()) {
 		file.read(buf, sizeof buf);
-
 		if(file.eof() && !strchr(buf, ':')) {
 			file.close();
 
 			return;
 		}
 
-		if(!f_buf) {
+		if (!f_buf) {
 			f_buf = new char[file.gcount()];
 			snprintf(f_buf, file.gcount(), "%s", buf);
 		}
@@ -76,17 +74,17 @@ void HighscoresState::getScores() {
 	std::list<std::pair<std::string, int> >::iterator i = score_list.begin();
 	std::string out("");
 
-	for(int j = 0; j < 5 && score_list.size() ; j++) {
+	for (int j = 0; j < 5 && score_list.size() ; j++) {
 		char s_score[256];
 		snprintf(s_score, sizeof s_score, "%u", i -> second);
 		out = out + i -> first;
 		out = out + ":";
 		out = out + s_score;
 		out = out + "\n";
-		i = score_list.erase(i);	
+		i = score_list.erase(i);
+		
 	}
-
-	std::cout<<out;
+	
 	getText(40, 50, out);
 	scores.setString(out);
 }
@@ -98,8 +96,8 @@ void HighscoresState::handleEvents() {
 		if (event.type == sf::Event::EventType::Closed) {
 			window->close();
 		}
-		if (event.type == sf::Event::EventType::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left) {
-			if (backButton.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
+		if ((event.type == sf::Event::EventType::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left) || (event.type == sf::Event::EventType::KeyPressed)) {
+			if (backButton.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y) || event.key.code == sf::Keyboard::B) {
 				game->changeState(Game::States::MAIN_MENU);
 				break;
 			}

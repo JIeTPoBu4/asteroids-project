@@ -6,7 +6,7 @@
 #include <map>
 #include <cstring>
 
-GameOverState::GameOverState(Game* _game, unsigned _score) : 
+GameOverState::GameOverState(Game* _game, unsigned _score) :
 score(_score), 
 GameState(_game),
 title(getText(60, 75.f, "YOUR SCORE:" + std::to_string(score))),
@@ -31,12 +31,12 @@ void GameOverState::render() {
 
 void GameOverState::handleEvents() {
 	sf::Event event;
+	
 	while (window->pollEvent(event)) {
 		if (event.type == sf::Event::EventType::Closed) {
 			window->close();
 		}
-
-		if(event.type == sf::Event::EventType::TextEntered && event.text.unicode < 128) {
+		if (event.type == sf::Event::EventType::TextEntered && event.text.unicode < 128) {
 			if (event.text.unicode == '\b' && !name.empty()) {
 				name.pop_back();
 			}
@@ -46,14 +46,12 @@ void GameOverState::handleEvents() {
 			nameField.setString(name);
 			centerText(nameField, 250.f);
 		}
-
 		if (event.type == sf::Event::EventType::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left) {
 			if (confirmButton.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
 				addScore();
 				game->changeState(Game::States::HIGHSCORES);
 				break;
 			}
-
 			if (cancelButton.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
 				game->changeState(Game::States::MAIN_MENU);
 				break;
@@ -67,6 +65,7 @@ void GameOverState::addScore() {
 
 	if(!file) {
 		std::cerr << "Error:can`t open stream!\n";
+
 		return;
 	}
 
@@ -77,11 +76,10 @@ void GameOverState::addScore() {
 	char *f_reserv = NULL;
 	char buf[4096];
 
-	 while(!file.eof()) {
+	 while (!file.eof()) {
 		file.read(buf, sizeof buf);
 
-		if(!strlen(buf) && !f_buf) {
-			std::cout<<name<<":"<<score<<std::endl;
+		if (!strlen(buf) && !f_buf) {
 			file.close();
 			std::ofstream file("./HighScoreFile",std::ios::out);
 			file << name << ":" << score << "\n";
@@ -95,12 +93,12 @@ void GameOverState::addScore() {
 			snprintf(f_buf, file.gcount(), "%s", buf);
 		}
 		else {
-			f_reserv = new char[strlen(f_buf) + 1];
-			snprintf(f_reserv, strlen(f_buf) + 1, "%s", f_buf);
-			delete []f_buf;
-			f_buf = new char[strlen(f_reserv) + 1 + file.gcount()];
-			snprintf(f_buf, strlen(f_reserv) + 1 + file.gcount(), "%s%s", f_reserv, buf);
-			delete []f_reserv;
+		f_reserv = new char[strlen(f_buf) + 1];
+		snprintf(f_reserv, strlen(f_buf) + 1, "%s", f_buf);
+		delete []f_buf;
+		f_buf = new char[strlen(f_reserv) + 1 + file.gcount()];
+		snprintf(f_buf, strlen(f_reserv) + 1 + file.gcount(), "%s%s", f_reserv, buf);
+		delete []f_reserv;
 		}
 	} 
 	
@@ -116,15 +114,14 @@ void GameOverState::addScore() {
 
 	file.close();
 	std::ofstream out_file("./HighScoreFile",std::ios::out);
-
+	
 	std::map<std::string, std::string>::iterator iter;
 	iter = score_list.find(name);
-	
-	if(iter -> first != name) {
+	if (iter -> first != name) {
 		out_file << name << ":" << score << "\n";
 		std::map<std::string,std::string>::iterator i = score_list.begin();
-
-		for(i ; i != score_list.end() ; i++) {
+		
+		for (i ; i != score_list.end() ; i++) {
 			out_file << i->first << ":" << i->second << "\n";
 		}
 	}

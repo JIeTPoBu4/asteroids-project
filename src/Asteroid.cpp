@@ -14,7 +14,6 @@ Asteroid::Asteroid(sf::Texture &m_Texture) :
 size(BIG),
 shape(new sf::ConvexShape()),
 alive(true) {
-	//m_Texture.loadFromFile("graphics/meteor.png");
 	shape->setPosition(1800.f - static_cast<float>(rand() % 801), static_cast<float>(rand() % 601));
 	shape->setOutlineColor(sf::Color::White);
 	shape->setOutlineThickness(1);
@@ -29,11 +28,10 @@ alive(true) {
 	ashape = shape;
 }
 
-Asteroid::Asteroid(Size _size, sf::Vector2f _speed, sf::Vector2f _position, sf::Texture &m_Texture) :
+Asteroid::Asteroid(Size _size, sf::Vector2f _speed, sf::Vector2f _position, sf::Texture &m_Texture) : 
 size(_size),
 shape(new sf::ConvexShape()),
 alive(true) {
-	//m_Texture.loadFromFile("graphics/meteor.png");
 	shape->setPosition(_position);
 	shape->setOutlineColor(sf::Color::White);
 	shape->setOutlineThickness(1);
@@ -51,6 +49,7 @@ Asteroid::~Asteroid() {
 void Asteroid::update(sf::Time dt) {
 	shape->move(speed.x * dt.asSeconds(), speed.y * dt.asSeconds());
 	sf::FloatRect bounds = shape->getGlobalBounds();
+	
 	if (bounds.left + bounds.width < 0) {
 		shape->move(1000.f + bounds.width, static_cast<float>(rand() % 601));
 	}
@@ -70,12 +69,14 @@ void Asteroid::update(sf::Time dt) {
 void Asteroid::generateShape() {
 	std::vector<float> points;
 	shape->setPointCount(numberOfSides);
+	
 	for (int i = 0; i < numberOfSides; i++) {
 		points.push_back(static_cast<float>(rand() * 2 * M_PI / (RAND_MAX + 1)));
 	}
 	std::sort(points.begin(), points.end());
+	
 	for (int i = 0; i < numberOfSides; i++) {
 		shape->setPoint(i, sf::Vector2f(radiuses.at(size) * sin(points.at(i)), 
-		radiuses.at(size) * cos(points.at(i))));
+			radiuses.at(size) * cos(points.at(i))));
 	}
 }

@@ -2,11 +2,9 @@
 #define _HIGHSCORES_STATE_H
 
 #include "GameState.h"
-#include <utility>
 
 class HighscoresState : public GameState {
-public:
-
+public :
 	HighscoresState(Game* _game);
 	virtual ~HighscoresState();
 
@@ -14,8 +12,7 @@ public:
 	virtual void update(sf::Time dt) override {};
 	virtual void render() override;
 
-private:
-	
+private :
 	sf::Text title;
 	sf::Text scores;
 	sf::Text backButton;

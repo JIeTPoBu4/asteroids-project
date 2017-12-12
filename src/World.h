@@ -9,7 +9,7 @@
 #include "Asteroid.h"
 
 class World {
-public:
+public :
 
 	explicit World(sf::RenderWindow& m_Window, sf::Font& font, Game *_game);
 	void update(sf::Time dt);
@@ -18,7 +18,7 @@ public:
 	int getLives();
 	int getScore();
 
-private:
+private :
 
 	sf::RenderWindow& 		m_Window;
 	sf::View 				m_WorldView;

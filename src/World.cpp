@@ -14,7 +14,8 @@ m_BGBounds(0.f, 0.f, 3000.f, 2000.f),
 currentWave(0),
 timeSinceLastShot(0),
 hud(&ship, font),
-game(_game) {
+game(_game),
+ship(&(_game -> a_obj)) {
 	buildScene();
 
 	m_WorldView.setCenter(m_SpawnPosition);
@@ -33,7 +34,6 @@ void World::buildScene() {
 
 	ship.setPosition(m_SpawnPosition);
 	ship.setWorldSize(sf::Vector2f(m_WorldView.getSize().x, m_WorldView.getSize().y));
-	//asteroids.setWorldSize(sf::Vector2f(m_WorldView.getSize().x, m_WorldView.getSize().y));
 	createNewWave();
 }
 
@@ -41,7 +41,6 @@ void World::createNewWave() {
 	for (int i = 0; i < floor(currentWave * 0.7 * 6); i++) {
 		asteroids.push_back(std::make_shared<Asteroid>(m_Texture_asteroid));
 	}
-
 	currentWave++;
 }
 
@@ -50,7 +49,7 @@ void World::handleCollisions() {
 		if (!ship.isRespawning() && asteroids.at(i)->intersect(ship)) {
 			ship.reset();
 			ship.decrementLives();
-			
+
 			if (ship.getLives() <= 0) {
 				game->changeState(Game::States::GAME_OVER, ship.getScore());
 
@@ -64,16 +63,21 @@ void World::handleCollisions() {
 			else if (asteroids.size() > i && asteroids.at(i)->intersect(*(ship.bullets.at(j)))) {
 				switch (asteroids.at(i)->getSize()) {
 				case Asteroid::Size::SMALL :
+					game -> a_obj.soundExplosion(Asteroid::Size::SMALL);
 					ship.updateScore(100);
 					break;
+
 				case Asteroid::Size::MEDIUM :
+					game -> a_obj.soundExplosion(Asteroid::Size::MEDIUM);
 					ship.updateScore(40);
 					break;
+
 				case Asteroid::Size::BIG :
+					game -> a_obj.soundExplosion(Asteroid::Size::BIG);
 					ship.updateScore(20);
 					break;
 				}
-				//Asteroids split
+
 				if (asteroids.at(i)->getSize() != Asteroid::Size::SMALL) {
 					sf::Vector2f speed = asteroids.at(i)->getSpeed();
 					sf::Vector2f position = asteroids.at(i)->getPosition();
@@ -112,7 +116,6 @@ void World::update(sf::Time dt) {
 
 	if (asteroids.empty()) {
 		createNewWave();
-		//ship.reset();
 	}
 
 	for (auto a : asteroids) {
@@ -128,7 +131,7 @@ void World::update(sf::Time dt) {
 	handleCollisions();
 }
 
-void World::draw() {
+void World::draw(){
 	m_Window.setView(m_BGView);
 	m_Window.draw(m_BackgroundSprite);
 
@@ -147,10 +150,10 @@ void World::draw() {
 }
 
 
-int World::getLives() {
+int World::getLives(){
 	return ship.getLives();
 }
 
-int World::getScore() {
+int World::getScore(){
 	return ship.getScore();
 }

@@ -24,6 +24,7 @@ add_executable(Asteroids
 	Ship.cpp
 	World.cpp
 	Controller.cpp
+	Audio.cpp
 	main.cpp
 
 # Adding headers just for consistency/IDE.
@@ -40,6 +41,7 @@ add_executable(Asteroids
 	Ship.h
 	World.h
 	Controller.h
+	Audio.h
 )
 
 target_include_directories(Asteroids PRIVATE ${OpenCV_INCLUDE_DIR})

@@ -24,7 +24,7 @@ sf::Vector2f Entity::perpendicularVector(const sf::Vector2f& vector) {
 	return{ -vector.y, vector.x };
 }
 
-sf::Vector2f Entity::getPoint(const sf::Shape& shape, unsigned int index) {
+sf::Vector2f Entity::getPoint(const sf::Shape& shape, unsigned int index)  {
 	return shape.getTransform().transformPoint(shape.getPoint(index));
 }
 
@@ -57,7 +57,7 @@ bool Entity::existsSeparatingAxisForFirst(const sf::Shape& shape_1, const sf::Sh
 		auto minmax_1 = projectShapeOn(shape_1, perpendicular);
 		auto minmax_2 = projectShapeOn(shape_2, perpendicular);
 
-		if ((minmax_1.y < minmax_2.x) || (minmax_2.y < minmax_1.x)) 
+		if ((minmax_1.y < minmax_2.x) || (minmax_2.y < minmax_1.x))
 			return true;
 	}
 

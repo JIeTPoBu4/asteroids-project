@@ -5,7 +5,7 @@
 
 class Bullet : public Entity {
 public:
-
+	
 	Bullet(sf::Vector2f position, float direction);
 	~Bullet();
 
@@ -13,7 +13,7 @@ public:
 	virtual void update(sf::Time dt) override;
 
 private:
-	
+
 	sf::CircleShape shape;
 
 	const float bulletSpeed = 450.f;

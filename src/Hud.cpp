@@ -1,7 +1,7 @@
 #include "Hud.h"
 #include <iostream>
 
-Hud::Hud(Ship *_ship, sf::Font& _font) :
+Hud::Hud(Ship *_ship, sf::Font& _font) : 
 ship(_ship),
 font(_font) {
 	text.setFont(font);

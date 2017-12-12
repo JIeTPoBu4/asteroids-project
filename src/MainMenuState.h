@@ -5,7 +5,7 @@
 #include "GameState.h"
 
 class MainMenuState : public GameState {
-public:
+public :
 
 	MainMenuState(Game *_game);
 	virtual ~MainMenuState();
@@ -14,8 +14,8 @@ public:
 	virtual void update(sf::Time dt) override;
 	virtual void render() override;
 
-private:
-	
+private :
+
 	sf::Text title;
 	sf::Text playButton;
 	sf::Text highscoreButton;

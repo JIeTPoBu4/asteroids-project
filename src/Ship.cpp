@@ -4,7 +4,8 @@
 #include <math.h>
 #include <iostream>
 
-Ship::Ship() : 
+
+Ship::Ship(Audio *_a_obj) :
 lives(numberOfLives),
 timeSinceRespawn(0.f),
 score(0),
@@ -13,7 +14,8 @@ Down(false),
 Left(false), 
 Right(false),
 Fire(false),
-timeSinceLastShot(0) {
+timeSinceLastShot(0),
+a_obj(_a_obj) {
 	shape.setPointCount(3);
 	shape.setPoint(0, sf::Vector2f(0, 0));
 	shape.setPoint(1, sf::Vector2f(-5.f, 20.f));
@@ -48,7 +50,7 @@ void Ship::setPosition (sf::Vector2f position) {
 	m_Sprite.setPosition(position);
 }
 
-void Ship::setFlags(bool up, bool down, bool left, bool right, bool fire) {
+void Ship::setFlags(bool up, bool down, bool left, bool right, bool fire){
 	Up = up;
 	Down = down;
 	Left = left;
@@ -58,19 +60,23 @@ void Ship::setFlags(bool up, bool down, bool left, bool right, bool fire) {
 
 void Ship::setFlags(flags flag) {
 	switch(flag) {
-		case up:
+		case up :
 			Up = true;
 			break;
-		case down:
+
+		case down :
 			Down = true;
 			break;
-		case left:
+
+		case left :
 			Left = true;
 			break;
-		case right:
+
+		case right :
 			Right = true;
 			break;
-		case fire:
+
+		case fire :
 			Fire = true;
 			timeSinceLastShot = 0;
 			break;
@@ -79,19 +85,23 @@ void Ship::setFlags(flags flag) {
 
 void Ship::clrFlags(flags flag) {
 	switch(flag) {
-		case up:
+		case up :
 			Up = false;
 			break;
-		case down:
+
+		case down :
 			Down = false;
 			break;
-		case left:
+
+		case left :
 			Left = false;
 			break;
-		case right:
+
+		case right :
 			Right = false;
 			break;
-		case fire:
+
+		case fire :
 			Fire = false;
 			break;
 	}
@@ -111,15 +121,15 @@ void Ship::update(sf::Time dt) {
 	speed.y = 200 * Down - 200 * Up;
 
 	if (Fire && (clk.getElapsedTime().asSeconds() - timeSinceLastShot > 0.2)) {
-		bullets.push_back(std::make_shared<Bullet>(getPosition(), getDirection()));	
-		clk.restart();
-		timeSinceLastShot = clk.getElapsedTime().asSeconds();	
+			bullets.push_back(std::make_shared<Bullet>(getPosition(), getDirection()));	
+			a_obj -> soundFire();
+			clk.restart();
+			timeSinceLastShot = clk.getElapsedTime().asSeconds();	
 	}
-	
+
 	sf::Vector2f pos = shape.getPosition();
 	direction = static_cast<float>(shape.getRotation() * M_PI / 180 - M_PI);
 	shape.move(speed * dt.asSeconds());
-	
 	if (pos.x < 0) {
 		shape.setPosition(0, pos.y);
 	}
@@ -129,7 +139,7 @@ void Ship::update(sf::Time dt) {
 	else if (pos.y < 0) {
 		reset();
 		decrementLives();
-
+	
 		if (lives <= 0)
 			return;
 	}
@@ -155,10 +165,8 @@ void Ship::reset() {
 }
 
 bool Ship::isRespawning() {
-	if (timeSinceRespawn < respawnTime) 
-		return true;
-	else 
-		return false;
+	if (timeSinceRespawn < respawnTime) return true;
+	else return false;
 }
 
 void Ship::draw(sf::RenderTarget& target, sf::RenderStates states) const {

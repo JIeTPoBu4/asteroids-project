@@ -4,7 +4,7 @@
 #include "GameState.h"
 
 class GameOverState : public GameState {
-public:
+public :
 
 	GameOverState(Game* _game, unsigned _score);
 	virtual ~GameOverState();
@@ -13,8 +13,8 @@ public:
 	virtual void update(sf::Time dt) override {};
 	virtual void render() override ;
 
-private:
-	
+private :
+
 	std::string name;
 	unsigned score;
 
